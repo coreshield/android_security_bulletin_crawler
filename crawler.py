@@ -112,4 +112,4 @@ if __name__ == "__main__":
         # print('title: ' + title + '\turl: ' + url +
         #       '\tdate: ' + date + '\tversion: ' + str(versions))
 
-    print(versionLastDate)
+    writeFile('result.json', str(versionLastDate))
