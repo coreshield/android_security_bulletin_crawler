@@ -1,11 +1,11 @@
 # This workflow will install Python dependencies, run tests and lint with a single version of Python
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 
-name: Python application
+name: get android security bulltin
 
 on:
   schedule:
-    - cron:  '* * * * *'
+    - cron:  '* 1 * * *'
 
 jobs:
   build:
@@ -29,13 +29,13 @@ jobs:
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    - name: Test with pytest
+    - name: Run python scripts
       run: |
         python crawler.py
     - name: Upload results
       uses: actions/upload-artifact@v2
       with:
-        name: results-${{ matrix.python-version }}
+        name: results
         path: result.json
       # Use always() to always run this step to publish test results when there are test failures
       if: ${{ always() }}

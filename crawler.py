@@ -1,6 +1,8 @@
 import requests
 from pyquery import PyQuery as pq
 import re
+import sys
+import os
 import apiInfo
 from config import *
 
@@ -31,7 +33,7 @@ def getAffectedAndroidVersion(title, url):
     if len(titleMatcher) == 1:
         return titleMatcher
 
-    resp = requests.get(url, verify=False, proxies=default_proxy)
+    resp = requests.get(url, verify=False, proxies=get_default_proxy())
     doc = pq(resp.text)
     tableList = doc('table')
     versions = []
@@ -79,7 +81,7 @@ if __name__ == "__main__":
     apiDict = apiInfo.getApiDict()
 
     # 获取安全补丁数据
-    resp = requests.get(baseUrl,  verify=False, proxies=default_proxy)
+    resp = requests.get(baseUrl,  verify=False, proxies=get_default_proxy())
     trList = pq(resp.text)('table').children('tr')
     trList = trList.filter(lambda i, this: len(pq(this).children('td')) == 4)
 
@@ -97,19 +99,21 @@ if __name__ == "__main__":
         date = dateList[0]
 
         # 从 url 页面解析得到该补丁影响的 Android 版本名
-        versions = getAffectedAndroidVersion(title, url)
+        versionNames = getAffectedAndroidVersion(title, url)
 
         # 将 Android 版本名转为 Android API，并写入结果数据
-        for version in versions:
-            versionInt = apiDict[version]
-            if versionInt in versionLastDate:
-                lastDate = versionLastDate[versionInt]
+        for version in versionNames:
+            versionIntStr = str(apiDict[version])
+            if versionIntStr in versionLastDate:
+                lastDate = versionLastDate[versionIntStr]
                 if date > lastDate:
-                    versionLastDate[versionInt] = date
+                    versionLastDate[versionIntStr] = date
             else:
-                versionLastDate[versionInt] = date
+                versionLastDate[versionIntStr] = date
 
-        # print('title: ' + title + '\turl: ' + url +
-        #       '\tdate: ' + date + '\tversion: ' + str(versions))
+        print('title: ' + title + '\turl: ' + url +
+              '\tdate: ' + date + '\tversion: ' + str(versionNames))
+
+    print('versionLastDate: ' + str(versionLastDate))
 
     writeFile('result.json', str(versionLastDate))
