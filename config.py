@@ -10,11 +10,10 @@ def get_default_proxy():
     if 'GITHUB_ACTIONS' in environ:
         if environ['GITHUB_ACTIONS'] == 'true':
             return {}
-
-    return {
-        'http': 'http://127.0.0.1:1087',
-        'https': 'https://127.0.0.1:1087',
-    }
+    
+    http_proxy = {'http': environ['http_proxy']} if "http_proxy" else {}
+    https_proxy = {'https': environ['https_proxy']} if "https_proxy" else {}
+    return {**http_proxy, **https_proxy}
 
 
 versionMatcher = re.compile(r'[\d\.]+')
