@@ -7,14 +7,14 @@ import apiInfo
 from config import *
 import json
 
-BASE_URL = 'https://source.android.com/security/bulletin'
+BULLETIN_URL = 'https://source.android.com/security/bulletin'
 
 
 def getTitleAndUrl(tdList):
     a = pq(tdList[0])('a')
     href = a.attr('href')
     title = href[href.rindex('/') + 1:]
-    url = BASE_URL + '/' + title
+    url = BULLETIN_URL + '/' + title
     return title, url
 
 
@@ -36,17 +36,17 @@ def getAffectedAndroidVersion(title, url):
 
     resp = requests.get(url, verify=False, proxies=get_default_proxy())
     doc = pq(resp.text)
-    tableList = doc('table')
+    tables = doc('table')
     versions = []
-    for table in tableList:
-        trList = pq(table)('tr')
+    for table in tables:
+        rows = pq(table)('tr')
 
         # 判断哪一列是版本号
-        thList = pq(trList[0])('th')
+        headers = pq(rows[0])('th')
         valid = False
-        for index, th in enumerate(thList):
-            thText = pq(th).text()
-            if thText == 'Updated AOSP versions' or thText == 'Updated versions' or thText == 'Affected versions' or thText == 'Affected Versions':
+        for index, th in enumerate(headers):
+            header_text = pq(th).text()
+            if header_text == 'Updated AOSP versions' or header_text == 'Updated versions' or header_text == 'Affected versions' or header_text == 'Affected Versions':
                 valid = True
                 break
 
@@ -54,14 +54,14 @@ def getAffectedAndroidVersion(title, url):
             continue
 
         # 修正 index 值为负值，反向查找，兼容某些表格行，前几列留空的情况
-        index = index - len(thList)
+        index = index - len(headers)
 
-        for tr in trList[1:]:
-            tdList = pq(tr)('td')
+        for tr in rows[1:]:
+            cells = pq(tr)('td')
             # 如果列数不足，则跳过
-            if len(tdList) + index <= 0:
+            if len(cells) + index <= 0:
                 continue
-            td = tdList[index]
+            td = cells[index]
             versionText = pq(td).text()
             versionMatched = versionMatcher.findall(versionText)
             if versionMatched:
@@ -82,17 +82,17 @@ if __name__ == "__main__":
     apiDict = apiInfo.getApiDict()
 
     # 获取安全补丁数据
-    resp = requests.get(BASE_URL,  verify=False, proxies=get_default_proxy())
+    resp = requests.get(BULLETIN_URL,  verify=False, proxies=get_default_proxy())
     trList = pq(resp.text)('table').children('tr')
     trList = trList.filter(lambda i, this: len(pq(this).children('td')) == 4)
 
     # 遍历获取每一个安全补丁版本
     for tr in trList:
-        tdList = pq(tr).children('td')
+        cells = pq(tr).children('td')
 
         # 解析得到 title, url, date 数据
-        title, url = getTitleAndUrl(tdList)
-        dateList = getDateList(tdList)
+        title, url = getTitleAndUrl(cells)
+        dateList = getDateList(cells)
 
         if len(dateList) == 0:
             continue

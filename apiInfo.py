@@ -3,6 +3,8 @@ import re
 from pyquery import PyQuery as pq
 from config import *
 
+BUILD_NUMBERS_URL = 'https://source.android.com/setup/start/build-numbers'
+
 __api_dict = {
     '4.4': 19,
     '4.4.0': 19,
@@ -45,25 +47,24 @@ __api_dict = {
 
 
 def getApiDict():
-    url = 'https://source.android.com/setup/start/build-numbers'
-    resp = requests.get(url, verify=False, proxies=get_default_proxy())
+    resp = requests.get(BUILD_NUMBERS_URL, verify=False, proxies=get_default_proxy())
     assert resp.status_code == 200
     # print(resp.text)
-    trList = pq(resp.text)(
+    rows = pq(resp.text)(
         'th:contains("Codename")').parent().parent().parent()('tr')
 
-    for tr in trList:
-        tdList = pq(tr)('td')
+    for row in rows:
+        cells = pq(row)('td')
 
-        if len(tdList) < 3:
+        if len(cells) < 3:
             continue
 
-        text = pq(tdList[1]).text()
+        text = pq(cells[1]).text()
         versionNames = versionMatcher.findall(text)
         if len(versionNames) == 0:
             continue
 
-        text = pq(tdList[2]).text()
+        text = pq(cells[2]).text()
         apiLevelMatcher = re.compile(r'API level (\d+)').match(text)
         if apiLevelMatcher:
             apiLevel = apiLevelMatcher.group(1)
