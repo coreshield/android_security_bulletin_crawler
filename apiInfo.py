@@ -47,6 +47,7 @@ __api_dict = {
 def getApiDict():
     url = 'https://source.android.com/setup/start/build-numbers'
     resp = requests.get(url, verify=False, proxies=get_default_proxy())
+    assert resp.status_code == 200
     # print(resp.text)
     trList = pq(resp.text)(
         'th:contains("Codename")').parent().parent().parent()('tr')
