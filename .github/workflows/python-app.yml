@@ -4,8 +4,7 @@
 name: get android security bulltin
 
 on:
-  schedule:
-    - cron: "0 * * * *"
+  push
 
 jobs:
   build:

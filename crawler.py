@@ -5,6 +5,7 @@ import sys
 import os
 import apiInfo
 from config import *
+import json
 
 baseUrl = 'https://source.android.com/security/bulletin'
 
@@ -116,4 +117,4 @@ if __name__ == "__main__":
 
     print('versionLastDate: ' + str(versionLastDate))
 
-    writeFile('result.json', str(versionLastDate))
+    writeFile('result.json', json.dumps(versionLastDate))
