@@ -31,7 +31,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <a href="https://github.com/coreshield/repo_name">
+  <a href="https://github.com/coreshield/android_security_bulletin_crawler">
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
@@ -40,14 +40,14 @@
   <p align="center">
     project_description
     <br />
-    <a href="https://github.com/coreshield/repo_name"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/coreshield/android_security_bulletin_crawler"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/coreshield/repo_name">View Demo</a>
+    <a href="https://github.com/coreshield/android_security_bulletin_crawler">View Demo</a>
     ·
-    <a href="https://github.com/coreshield/repo_name/issues">Report Bug</a>
+    <a href="https://github.com/coreshield/android_security_bulletin_crawler/issues">Report Bug</a>
     ·
-    <a href="https://github.com/coreshield/repo_name/issues">Request Feature</a>
+    <a href="https://github.com/coreshield/android_security_bulletin_crawler/issues">Request Feature</a>
   </p>
 </p>
 
@@ -88,12 +88,12 @@
 
 Here's a blank template to get started:
 **To avoid retyping too much info. Do a search and replace with your text editor for the following:**
-`coreshield`, `repo_name`, `twitter_handle`, `email`, `project_title`, `project_description`
+`coreshield`, `android_security_bulletin_crawler`, `twitter_handle`, `email`, `project_title`, `project_description`
 
 
 ### Built With
 
-* []()
+* [GitHub Actions](https://github.com/features/actions)
 * []()
 * []()
 
@@ -174,8 +174,8 @@ Project Link: [https://github.com/coreshield/repo_name](https://github.com/cores
 ## Acknowledgements
 
 * [Best README Template](https://github.com/othneildrew/Best-README-Template)
-* []()
-* []()
+* [pyquery](https://github.com/gawel/pyquery)
+* [requests](https://github.com/psf/requests)
 
 
 
