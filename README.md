@@ -102,7 +102,7 @@ Here's a blank template to get started:
 <!-- GETTING STARTED -->
 ## Getting Started
 
-To get a local copy up and running follow these simple steps.
+You can simply download the result in json format from [release](https://github.com/coreshield/android_security_bulletin_crawler/releases) page
 
 ### Prerequisites
 
