@@ -102,6 +102,8 @@ Here's a blank template to get started:
 <!-- GETTING STARTED -->
 ## Getting Started
 
+Query latest security patch release date for various Android version.
+
 You can simply download the result in json format from [release](https://github.com/coreshield/android_security_bulletin_crawler/releases) page
 
 ### Prerequisites
