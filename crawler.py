@@ -7,14 +7,14 @@ import apiInfo
 from config import *
 import json
 
-baseUrl = 'https://source.android.com/security/bulletin'
+BASE_URL = 'https://source.android.com/security/bulletin'
 
 
 def getTitleAndUrl(tdList):
     a = pq(tdList[0])('a')
     href = a.attr('href')
     title = href[href.rindex('/') + 1:]
-    url = baseUrl + '/' + title
+    url = BASE_URL + '/' + title
     return title, url
 
 
@@ -82,7 +82,7 @@ if __name__ == "__main__":
     apiDict = apiInfo.getApiDict()
 
     # 获取安全补丁数据
-    resp = requests.get(baseUrl,  verify=False, proxies=get_default_proxy())
+    resp = requests.get(BASE_URL,  verify=False, proxies=get_default_proxy())
     trList = pq(resp.text)('table').children('tr')
     trList = trList.filter(lambda i, this: len(pq(this).children('td')) == 4)
 
