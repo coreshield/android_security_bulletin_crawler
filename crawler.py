@@ -6,6 +6,7 @@ import os
 import apiInfo
 from config import *
 import json
+import hashlib
 
 BULLETIN_URL = 'https://source.android.com/security/bulletin'
 
@@ -82,7 +83,8 @@ if __name__ == "__main__":
     apiDict = apiInfo.getApiDict()
 
     # 获取安全补丁数据
-    resp = requests.get(BULLETIN_URL,  verify=False, proxies=get_default_proxy())
+    resp = requests.get(BULLETIN_URL,  verify=False,
+                        proxies=get_default_proxy())
     trList = pq(resp.text)('table').children('tr')
     trList = trList.filter(lambda i, this: len(pq(this).children('td')) == 4)
 
@@ -115,6 +117,11 @@ if __name__ == "__main__":
         print('title: ' + title + '\turl: ' + url +
               '\tdate: ' + date + '\tversion: ' + str(versionNames))
 
-    print('versionLastDate: ' + str(versionLastDate))
+    versionLastDate['10'] = '2010'
+    result = json.dumps(versionLastDate, sort_keys=True)
+    print('result: ' + result)
+    hash_value = hashlib.sha256(result.encode('utf-8')).hexdigest()
+    print('hash: ' + hash_value)
 
-    writeFile('result.json', json.dumps(versionLastDate))
+
+    writeFile('result.json', result)
