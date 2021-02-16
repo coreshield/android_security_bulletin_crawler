@@ -30,27 +30,39 @@ jobs:
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
       - name: Run python scripts
         run: |
-          python crawler.py
+          output=$(python crawler.py)
+          echo "::set-output name=digest::$output"
+        id: crawler
+      - name: Fetch Latest Release
+        id: latest_release
+        uses: thebritican/fetch-latest-release@v2.0.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload artifact
+        if: ${{ steps.latest_release.outputs.body != steps.crawler.outputs.digest }}
         uses: actions/upload-artifact@v2
         with:
           name: results
           path: result.json
       - name: Get current date
+        if: ${{ steps.latest_release.outputs.body != steps.crawler.outputs.digest }}
         id: current_date
         run: |
           echo "curDate=$(date +'%Y%m%d_%H%M%S')" >> $GITHUB_ENV
       - name: Create Release
+        if: ${{ steps.latest_release.outputs.body != steps.crawler.outputs.digest }}
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          body: ${{ steps.crawler.outputs.digest }}
           tag_name: ${{ env.curDate }}
           release_name: ${{ env.curDate }}
           draft: false
           prerelease: false
       - name: Upload Release Asset
+        if: ${{ steps.latest_release.outputs.body != steps.crawler.outputs.digest }}
         id: upload-release-asset
         uses: actions/upload-release-asset@v1
         env:
