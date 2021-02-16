@@ -6,6 +6,7 @@ import os
 import apiInfo
 from config import *
 import json
+import collections
 
 BULLETIN_URL = 'https://source.android.com/security/bulletin'
 
@@ -115,6 +116,16 @@ if __name__ == "__main__":
         print('title: ' + title + '\turl: ' + url +
               '\tdate: ' + date + '\tversion: ' + str(versionNames))
 
+    versionLastDate['10'] = '2010'
     print('versionLastDate: ' + str(versionLastDate))
+    digest1 = hash(frozenset(versionLastDate.items()))
+    print('digest1: ' + str(digest1))
+
+    versionLastDate = collections.OrderedDict(sorted(versionLastDate.items()))
+
+    # versionLastDate = sorted(versionLastDate)
+    print('versionLastDate: ' + str(versionLastDate))
+    digest2 = hash(frozenset(versionLastDate.items()))
+    print('digest2: ' + str(digest2))
 
     writeFile('result.json', json.dumps(versionLastDate))
