@@ -4,8 +4,9 @@
 name: get android security bulltin
 
 on:
-  schedule:
-    - cron: "0 23/7 * * *" # 7:00 & 15:00 in UTC+8
+  push
+  # schedule:
+  #   - cron: "0 23/7 * * *" # 7:00 & 15:00 in UTC+8
 
 jobs:
   build:
@@ -30,7 +31,11 @@ jobs:
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
       - name: Run python scripts
         run: |
-          python crawler.py
+          output=$(python crawler.py)
+          echo "::set-output name=digest::$output"
+        id: crawler
+      - name: Print digest
+        run: echo "${{ steps.crawler.outputs.digest }}"
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
@@ -46,6 +51,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          # body: 
           tag_name: ${{ env.curDate }}
           release_name: ${{ env.curDate }}
           draft: false
